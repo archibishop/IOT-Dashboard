@@ -1,0 +1,42 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+<h1 class="text-center mt-5">Sign Up</h1>
+<form class="mt-5 mb-5" action="{% url 'signup'%}" method="POST">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger alert-dismissible fade show">
+        <strong>{{ form.non_field_errors }}</strong>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="form-group">
+        <label for="firstName">{{ form.first_name.label_tag }}</label>
+        {{ form.first_name }}
+    </div>
+    <div class="form-group">
+        <label for="firstName">{{ form.last_name.label_tag }}</label>
+        {{ form.last_name }}
+    </div>
+    <div class="form-group">
+        <label for="firstName">{{ form.user_name.label_tag }}</label>
+        {{ form.user_name }}
+    </div>
+    <div class="form-group">
+        <label for="firstName">{{ form.email.label_tag }}</label>
+        {{ form.email }}
+        <small id="emailHelp"
+            class="form-text text-muted">We wll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="firstName">{{ form.password.label_tag }}</label>
+        {{ form.password }}
+    </div>
+    <div class="form-group">
+        <label for="firstName">{{ form.confirm_password.label_tag }}</label>
+        {{ form.confirm_password }}
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+</form>
+{% endblock %}

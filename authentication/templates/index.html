@@ -1,0 +1,16 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">IOT DASHBOARD</h1>
+        <p class="lead">Get weather information about Bento Goncalves in Brazil. Information includes Moisture,
+            Atomospheric pressure, Tempreture Readings.</p>
+        <p class="lead mt-4">
+        {% if request.user.is_authenticated %}
+        <a href="#" class="btn btn-lg btn-secondary">Welcome</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-lg btn-secondary">LOGIN</a>
+        {% endif %}     
+        </p>
+    </main>
+{% endblock %}
