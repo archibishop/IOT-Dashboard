@@ -1,0 +1,37 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Current Readings</h1>
+    <p class="lead mt-5" >Get the weather information about <strong>Bento Goncalves</strong> area in Brazil. Information includes Moisture,
+    Atomospheric pressure, Tempreture Readings.</p>
+</div>
+
+<div class="container mt-3">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Tempreture(°)</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title display-3 mt-5 mb-5">{{ temp }} <small class="text-muted"></small></h1>
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Moisture(%)</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title display-3 mt-5 mb-5">{{ mositure }} <small class="text-muted"></small></h1>
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Atmospheric Temp.(hpa)</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title display-3 mt-5 mb-5">{{ at }} <small class="text-muted"></small></h1>
+            </div>
+        </div>
+    </div>
+{% endblock %}
