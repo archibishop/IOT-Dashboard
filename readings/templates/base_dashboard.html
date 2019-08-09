@@ -152,6 +152,55 @@
             border-color: transparent;
             box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
         }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+        
+        .tooltip {
+            background: #b0c4de;
+            border: 0;
+            border-radius: 8px;
+            font-family: 'Lobster';
+            font-size: 12px;
+            font-weight: bold;
+            height: 80px;
+            padding: 2px;
+            pointer-events: none;
+            position: absolute;
+            text-align: center;
+            width: 120px;
+        }
+        
+        .graph {
+            margin-left: 250px;
+        }
+
+        .overlay {
+            fill: none;
+            pointer-events: all;
+        }
+
+        .focus circle {
+            fill: #F1F3F3;
+            stroke: #6F257F;
+            stroke-width: 5px;
+        }
+        
+        .hover-line {
+            stroke: #6F257F;
+            stroke-width: 2px;
+            stroke-dasharray: 3,3;
+        }
+
     </style>
 </head>
 
@@ -172,27 +221,27 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link {{ activedashboard }}" href="{% url 'dashboard' %}">
                                 <span data-feather="home"></span>
-                                Dashboard <span class="sr-only">(current)</span>
+                                Dashboard 
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link {{ activetemp }}" href="{% url 'temp' %}">
                                 <span data-feather="file"></span>
-                                Tempreture
+                                Temperature
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link {{ activemositure }}" href="{% url 'moisture' %}">
                                 <span data-feather="shopping-cart"></span>
                                 Moisture
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link {{ activepressure }}" href="{% url 'pressure' %}">
                                 <span data-feather="users"></span>
-                                Atmospheric Temp
+                                Atmospheric Pressure
                             </a>
                         </li>
                     </ul>
@@ -212,6 +261,8 @@
                 {% endif %}
                 {% block content %}
                 {% endblock %}
+                <graph class="graph">  
+                </graph>
             </main>
 
         </div>
