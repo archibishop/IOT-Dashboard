@@ -30,7 +30,7 @@ class SignUp(View):
             login(request, user)
             message_output = 'You have been successfully logged in.'
             messages.success(request, message_output)
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('dashboard'))
 
         return render(request, self.template_name, {'form': form})
 
@@ -53,16 +53,11 @@ class Login(View):
                 message_output = 'You have successfully Logged In.'
                 messages.success(
                     request, message_output)
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(reverse('dashboard'))
         message_output = 'User does not exist. Wrong Email/Password.'
         messages.error(request, message_output)
         return render(request, self.template_name, {'form': form})
 
-class Home(View):
-    template_name = 'home.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {})
 
 class Logout(View):
     def get(self, request):
