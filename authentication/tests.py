@@ -9,6 +9,19 @@ class AuthenticationTestCase(TestCase):
         response = client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
 
+    def test_index_page_after_login(self):
+        client = Client()
+        client.post(reverse('signup'), {"first_name": "john",
+                                                    "last_name": "doe",
+                                                    "user_name": "jdoe", 
+                                                    "email": "test@gmail.com",
+                                                     "password": "Test1234@", 
+                                                     "confirm_password": "Test1234@"})
+        client.post(reverse('login'), {
+                "username": "jdoe", "password": "Test1234@"})
+        response = client.get(reverse('index'))
+        self.assertEqual(response.status_code, 302)    
+
     def test_login_page(self):
         client = Client()
         response = client.get(reverse('login'))

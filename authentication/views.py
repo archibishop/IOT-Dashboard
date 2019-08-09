@@ -13,6 +13,8 @@ class Index(View):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('dashboard'))
         return render(request, self.template_name, {})
 
 class SignUp(View):
