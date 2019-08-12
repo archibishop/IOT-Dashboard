@@ -1,9 +1,20 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
 
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Moisture</h1>
 </div>
+<div class="loader text-center">
+    <img src="{% static 'img/loading.gif' %}" alt="Loading...">
+</div>
+{% endblock %}
+
+{% block btnblock %}
+<div class="text-center">
+    <a class="btn btn-primary mt-3" href="{% url 'generate-pdf' '2' %}">Generate PDF</a>
+</div>
+
 {% endblock %}
 
 {% block script %}
@@ -46,10 +57,13 @@
 
     d3.json("{% url 'readings' %}", function (error, data) {
         data.forEach(function (d) {
-
             d.month = parseDate(d.created_at);
             d.count_items = +d.field2;
         });
+
+        if (data) {
+            d3.select(".loader").remove();
+        }  
 
         x.domain(d3.extent(data, function (d) { return d.month; }));
         y.domain(d3.extent(data, function (d) { return d.count_items; }));

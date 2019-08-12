@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+{% load static %}
 
 <head>
     <meta charset="utf-8">
@@ -7,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>IoT Dashboard</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/dashboard/">
 
@@ -24,184 +25,16 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-
-        body {
-            font-size: .875rem;
-        }
-
-        .feather {
-            width: 16px;
-            height: 16px;
-            vertical-align: text-bottom;
-        }
-
-        /*
-        * Sidebar
-        */
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            /* Behind the navbar */
-            padding: 48px 0 0;
-            /* Height of navbar */
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        }
-
-        .sidebar-sticky {
-            position: relative;
-            top: 0;
-            height: calc(100vh - 48px);
-            padding-top: .5rem;
-            overflow-x: hidden;
-            overflow-y: auto;
-            /* Scrollable contents if viewport is shorter than content. */
-        }
-
-        @supports ((position: -webkit-sticky) or (position: sticky)) {
-            .sidebar-sticky {
-                position: -webkit-sticky;
-                position: sticky;
-            }
-        }
-
-        .sidebar .nav-link {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .sidebar .nav-link .feather {
-            margin-right: 4px;
-            color: #999;
-        }
-
-        .sidebar .nav-link.active {
-            color: #007bff;
-        }
-
-        .sidebar .nav-link:hover .feather,
-        .sidebar .nav-link.active .feather {
-            color: inherit;
-        }
-
-        .sidebar-heading {
-            font-size: .75rem;
-            text-transform: uppercase;
-        }
-
-        /*
-        * Content
-        */
-
-        [role="main"] {
-            padding-top: 133px;
-            /* Space for fixed navbar */
-        }
-
-        @media (min-width: 768px) {
-            [role="main"] {
-                padding-top: 48px;
-                /* Space for fixed navbar */
-            }
-        }
-
-        /*
-        * Navbar
-        */
-
-        .navbar-brand {
-            padding-top: .75rem;
-            padding-bottom: .75rem;
-            font-size: 1rem;
-            background-color: rgba(0, 0, 0, .25);
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
-        }
-
-        .navbar .form-control {
-            padding: .75rem 1rem;
-            border-width: 0;
-            border-radius: 0;
-        }
-
-        .form-control-dark {
-            color: #fff;
-            background-color: rgba(255, 255, 255, .1);
-            border-color: rgba(255, 255, 255, .1);
-        }
-
-        .form-control-dark:focus {
-            border-color: transparent;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
-        }
-
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
-        .line {
-            fill: none;
-            stroke: steelblue;
-            stroke-width: 3px;
-        }
-        
-        .tooltip {
-            background: #b0c4de;
-            border: 0;
-            border-radius: 8px;
-            font-family: 'Lobster';
-            font-size: 12px;
-            font-weight: bold;
-            height: 80px;
-            padding: 2px;
-            pointer-events: none;
-            position: absolute;
-            text-align: center;
-            width: 120px;
-        }
-        
-        .graph {
-            margin-left: 250px;
-        }
-
-        .overlay {
-            fill: none;
-            pointer-events: all;
-        }
-
-        .focus circle {
-            fill: #F1F3F3;
-            stroke: #6F257F;
-            stroke-width: 5px;
-        }
-        
-        .hover-line {
-            stroke: #6F257F;
-            stroke-width: 2px;
-            stroke-dasharray: 3,3;
-        }
-
-    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"
+        integrity="sha256-gJWdmuCRBovJMD9D/TVdo4TIK8u5Sti11764sZT1DhI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.5/canvg.js"
+        integrity="sha256-gS9x7L+zPeuIJQi5Ozx6nkmnAKegHZGdx/Zy/jOs/Ao=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-html2pdf@1.1.4/lib/html2pdf.min.js"></script>
+    <script src="{% static 'js/html2canvas.min.js' %}"></script>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -248,7 +81,7 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <main id="demo" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                 {% if messages %}
                 {% for message in messages %}
                 {% if message.tags != 'error' %}
@@ -261,8 +94,9 @@
                 {% endif %}
                 {% block content %}
                 {% endblock %}
-                <graph class="graph">  
-                </graph>
+                <graph class="graph" id="graph"></graph>
+                {% block btnblock %}
+                {% endblock %}
             </main>
 
         </div>
