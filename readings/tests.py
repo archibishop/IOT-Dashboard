@@ -46,9 +46,3 @@ class ReadingTestCase(TestCase):
         response = client.get(reverse('readings'))
         self.assertEqual(response.status_code, 200)
 
-    def test_order_pdf_format(self):
-        client = Client()
-        response = client.get(reverse('pressure'))
-        response = client.get('/generate-pdf/1')
-        self.assertEqual(response.get('Content-Type'), 'application/pdf')
-        self.assertEqual(response.status_code, 200)
