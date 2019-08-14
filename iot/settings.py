@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,9 +24,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'm48m&yu(u6#y2zcdml77s-5a*eo4+(6*0jp8iotvi6z62701(k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['iot-dashboard1.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
@@ -143,3 +144,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# Check if on heroku
+if os.environ.get("HEROKU"):
+    django_heroku.settings(locals())

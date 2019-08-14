@@ -12,12 +12,12 @@
 
 {% block btnblock %}
 <div class="text-center">
-    <a class="btn btn-primary mt-3" href="{% url 'generate-pdf' '3' %}">Generate PDF</a>
+    <a class="btn btn-primary mt-3" href="{% url 'generate-pdf' '3' %}" target="_blank">Generate PDF</a>
 </div>
 {% endblock %}
 
 {% block script %}
-<script src="http://d3js.org/d3.v3.js"></script>
+<script src="https://d3js.org/d3.v3.js"></script>
 <script>
 
     var margin = { top: 20, right: 20, bottom: 30, left: 50 },
