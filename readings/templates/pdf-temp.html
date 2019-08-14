@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>PDF</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"
+        integrity="sha256-gJWdmuCRBovJMD9D/TVdo4TIK8u5Sti11764sZT1DhI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.5/canvg.js"
+        integrity="sha256-gS9x7L+zPeuIJQi5Ozx6nkmnAKegHZGdx/Zy/jOs/Ao=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-html2pdf@1.1.4/lib/html2pdf.min.js"></script>
+    <script src="{% static 'js/html2canvas.min.js' %}"></script>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <main id="demo" role="main" class="col-md-12 ml-sm-auto col-lg-10 px-4">
+                <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+                    <h1 class="display-4">Tempreture</h1>
+                </div>
+                <graph class="graphs" id="graph">
+                </graph>
+                <canvas id="myCanvas"></canvas>
+            </main>
+
+        </div>
+    </div>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script>
+        var dataReadings = {{ data_json| safe }};
+        var data = dataReadings['feeds']
+        var margin = { top: 20, right: 20, bottom: 30, left: 50 },
+            width = 760 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+        var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%SZ").parse;  // for dates like "2014-01-01T00:00:00Z"
+        const bisectDate = d3.bisector(d => parseDate(d.created_at)).left;
+
+        const tooltip = d3.select('graph').append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0);
+
+        var x = d3.time.scale()
+            .range([0, width]);
+
+        var y = d3.scale.linear()
+            .range([height, 0]);
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+        var line = d3.svg.line()
+            .x(function (d) { return x(d.month); })
+            .y(function (d) { return y(d.count_items); });
+
+        var svg = d3.select("graph").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        data.forEach(function (d) {
+
+            d.month = parseDate(d.created_at);
+            d.count_items = +d.field1;
+        });
+
+        x.domain(d3.extent(data, function (d) { return d.month; }));
+        y.domain(d3.extent(data, function (d) { return d.count_items; }));
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("moisture");
+
+
+        const focus = svg.append('g')
+            .style('display', 'none');
+
+        svg.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("d", line);
+
+        focus.append("line")
+            .attr("class", "x-hover-line hover-line")
+            .attr("y1", 0)
+            .attr("y2", height);
+
+        focus.append("line")
+            .attr("class", "y-hover-line hover-line")
+            .attr("x1", width)
+            .attr("x2", width);
+
+        focus.append("circle")
+            .attr("r", 7.5);
+
+        focus.append("text")
+            .attr("x", 15)
+            .attr("dy", ".31em");
+
+        svg.append("rect")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("class", "overlay")
+            .attr("width", width)
+            .attr("height", height)
+            .on("mouseover", function () { focus.style("display", null); })
+            .on("mouseout", function () { focus.style("display", "none"); })
+            .on("mousemove", mousemove);
+
+        function mousemove() {
+            const coordX = d3.event.layerX;
+            const x0 = x.invert(d3.mouse(this)[0]),
+                i = bisectDate(data, x0, 1),
+                d0 = data[i - 2],
+                d1 = data[i - 1],
+                d = x0 - d0.month > d1.month - x0 ? d1 : d0;
+            focus.attr("transform", "translate(" + x(d.month) + "," + y(d.field1) + ")");
+            focus.select("text").text(function () { return d.field1; });
+            focus.select(".x-hover-line").attr("y2", height - y(d.field1));
+            focus.select(".y-hover-line").attr("x2", width + width);
+            tooltip.transition().duration(200).style('opacity', 0.9);
+            tooltip.html(`<span>${d.month}<br/>Temp: ${d.field1}</span>`)
+                .style('left', `${coordX + 60}px`);
+        }
+
+    </script>
+</body>
+
+</html>

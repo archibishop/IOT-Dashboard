@@ -1,8 +1,18 @@
 {% extends 'base_dashboard.html' %}
+{% load static %}
 
 {% block content %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Temperature</h1>
+</div>
+<div class="loader text-center">
+    <img src="{% static 'img/loading.gif' %}" alt="Loading...">
+</div>
+{% endblock %}
+
+{% block btnblock %}
+<div class="text-center">
+    <a class="btn btn-primary mt-3" href="{% url 'generate-pdf' '1' %}">Generate PDF</a>
 </div>
 {% endblock %}
 
@@ -50,6 +60,9 @@
             d.month = parseDate(d.created_at);
             d.count_items = +d.field1;
         });
+        if (data) {
+            d3.select(".loader").remove();  
+        }  
 
         x.domain(d3.extent(data, function (d) { return d.month; }));
         y.domain(d3.extent(data, function (d) { return d.count_items; }));
