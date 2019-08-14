@@ -13,6 +13,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from reportlab.platypus import SimpleDocTemplate, Image
+from django.contrib.sites.shortcuts import get_current_site
+import os
 
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
@@ -74,11 +76,23 @@ class GeneratePdf(View):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='application/pdf')
         doc = SimpleDocTemplate(response,topMargin=2)
-        chrome_options = Options()  
+        chrome_options = Options()
+        chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', None)
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--headless") 
-        driver = webdriver.Chrome(ChromeDriverManager().install(),
-                            chrome_options=chrome_options)                                 
-        driver.get('http://127.0.0.1:8000/pdf/' + str(kwargs['page']))
+        chrome_options.binary_location = chrome_bin
+        # For local environment
+        if settings.DEBUG:
+            driver = webdriver.Chrome(ChromeDriverManager().install(),
+                                chrome_options=chrome_options)
+        else:                        
+            chrome_exec_shim = os.environ.get("$GOOGLE_CHROME_SHIM", "chromedriver")
+            driver = webdriver.Chrome(executable_path=chrome_exec_shim,
+                                chrome_options=chrome_options)
+        domain = 'http://{}'.format(get_current_site(request))
+        url = "{}/pdf/{}".format(domain, str(kwargs['page']))                                                                   
+        driver.get(url)
         total_width = driver.execute_script("return document.body.scrollWidth")
         total_height = driver.execute_script("return document.body.scrollHeight")
         driver.set_window_size(total_width, total_height)      
@@ -91,7 +105,7 @@ class GeneratePdf(View):
         doc.build(elements)
         return response
 
-@cache_page(CACHE_TTL)
+# @cache_page(CACHE_TTL)
 def get_readings(request):
     data = []
     r = requests.get('https://api.thingspeak.com/channels/306267/feeds.json?results=100', params=request.GET)
