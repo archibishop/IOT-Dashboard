@@ -75,6 +75,7 @@ class PDF(View):
 class GeneratePdf(View):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='application/pdf')
+        local =  os.environ.get('local', True)
         doc = SimpleDocTemplate(response,topMargin=2)
         chrome_options = Options()
         chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', None)
@@ -83,7 +84,7 @@ class GeneratePdf(View):
         chrome_options.add_argument("--headless") 
         chrome_options.binary_location = chrome_bin
         # For local environment
-        if settings.DEBUG:
+        if local:
             driver = webdriver.Chrome(ChromeDriverManager().install(),
                                 chrome_options=chrome_options)
         else:                        

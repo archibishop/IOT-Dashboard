@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'm48m&yu(u6#y2zcdml77s-5a*eo4+(6*0jp8iotvi6z62701(k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', False)
+DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = ['iot-dashboard1.herokuapp.com', '127.0.0.1']
 
