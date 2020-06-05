@@ -11,7 +11,7 @@ crayons==0.2.0
 cssselect2==0.2.1
 defusedxml==0.6.0
 dj-database-url==0.5.0
-Django==2.2.4
+Django==2.2.13
 django-easy-pdf==0.1.1
 django-heroku==0.3.1
 django-redis==4.10.0
