@@ -1,7 +1,7 @@
 astroid==2.2.5
 cairocffi==1.0.2
 CairoSVG==2.4.0
-certifi==2019.6.16
+certifi==2022.12.7
 cffi==1.12.3
 chardet==3.0.4
 colorama==0.4.1
